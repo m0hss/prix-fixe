@@ -1,0 +1,57 @@
+/*
+ * Prix Fixe — design tokens.
+ * Every color in the template resolves to one of these variables.
+ * Light is the default; dark follows the operating system.
+ *
+ * The seven brand tokens are the ones you are expected to change.
+ * The derived tokens below them are built from the brand tokens with
+ * color-mix() so the page keeps WCAG AA text contrast in both themes.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Brand tokens */
+  --linen: #e9e1d2; /* tablecloth */
+  --card: #f6f0e4; /* menu card */
+  --ink: #1c1a17; /* body text */
+  --muted: #7a7166; /* secondary text, large sizes and ornaments */
+  --rule: #b08d57; /* gold rules and ornaments */
+  --accent: #7a1f2b; /* wine */
+  --ticket: #ffffff; /* thermal paper */
+
+  /* Derived tokens */
+  --muted-ink: color-mix(in oklab, var(--muted) 78%, var(--ink)); /* small secondary text, ≥ 4.5:1 on --card */
+  --accent-ink: var(--accent); /* accent used as text */
+  --on-ink: var(--card); /* text on ink-filled buttons */
+  --ticket-ink: var(--ink); /* thermal print */
+  --ticket-muted: color-mix(in oklab, var(--ticket-ink) 72%, var(--ticket));
+  --focus: var(--accent);
+  --scrim: color-mix(in oklab, var(--ink) 42%, transparent);
+  --shadow: color-mix(in oklab, var(--ink) 16%, transparent);
+  --weave: color-mix(in oklab, var(--ink) 5%, transparent);
+  --grain: var(--ink);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --linen: #100d0b;
+    --card: #1c1815;
+    --ink: #ede4d3;
+    --muted: #9c9284;
+    --rule: #c9a46a;
+    --accent: #c4505e;
+    --ticket: #f4f1ea;
+
+    --muted-ink: var(--muted);
+    --accent-ink: color-mix(in oklab, var(--accent) 70%, var(--ink));
+    --on-ink: var(--card);
+    --ticket-ink: var(--linen);
+    --ticket-muted: color-mix(in oklab, var(--ticket-ink) 72%, var(--ticket));
+    --focus: var(--accent);
+    --scrim: color-mix(in oklab, var(--linen) 72%, transparent);
+    --shadow: color-mix(in oklab, var(--linen) 70%, transparent);
+    --weave: color-mix(in oklab, var(--ink) 4%, transparent);
+    --grain: var(--ink);
+  }
+}

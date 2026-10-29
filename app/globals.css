@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "./print.css";
+
+/* Only theme colors exist: Tailwind's default palette is switched off so
+   components cannot reach for a hardcoded color. */
+@theme {
+  --color-*: initial;
+}
+
+@theme inline {
+  --color-linen: var(--linen);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-muted-ink: var(--muted-ink);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-ink: var(--on-ink);
+  --color-ticket: var(--ticket);
+  --color-ticket-ink: var(--ticket-ink);
+  --color-ticket-muted: var(--ticket-muted);
+  --color-focus: var(--focus);
+  --color-scrim: var(--scrim);
+
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--linen);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-weight: 500;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--accent) 28%, transparent);
+  }
+}
+
+@layer components {
+  /* Tablecloth: a fine plain weave plus a little grain. */
+  .linen {
+    background-color: var(--linen);
+    background-image:
+      repeating-linear-gradient(0deg, var(--weave) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, var(--weave) 0 1px, transparent 1px 3px);
+  }
+
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    background-color: var(--grain);
+    opacity: 0.07;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 0 0 0 -0.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 0 0 0 -0.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Menu card: paper, soft shadow and a gold double rule. */
+  .menu-card {
+    background-color: var(--card);
+    box-shadow:
+      0 1px 2px var(--shadow),
+      0 18px 48px -12px var(--shadow);
+  }
+  .menu-card .double-rule {
+    position: absolute;
+    inset: 10px;
+    pointer-events: none;
+    border: 1px solid var(--rule);
+    outline: 1.5px solid var(--rule);
+    outline-offset: 3px;
+  }
+  @media (min-width: 40rem) {
+    .menu-card .double-rule {
+      inset: 16px;
+      outline-offset: 4px;
+    }
+  }
+
+  /* Typography */
+  .caps {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+  }
+  .house-caps {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.24em;
+  }
+  .oldstyle {
+    font-variant-numeric: oldstyle-nums proportional-nums;
+  }
+
+  /* Dotted leader between a dish and its price. */
+  .leader {
+    flex: 1 1 1.5rem;
+    min-width: 1.5rem;
+    height: 0.5em;
+    align-self: baseline;
+    background-image: radial-gradient(circle, var(--muted) 0.85px, transparent 1.25px);
+    background-size: 6px 4px;
+    background-repeat: repeat-x;
+    background-position: left bottom;
+  }
+
+  /* Circled feature mark. */
+  .mark {
+    display: inline-grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    flex: none;
+    border: 1px solid currentColor;
+    border-radius: 9999px;
+    color: var(--accent-ink);
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+    vertical-align: 0.15em;
+  }
+
+  /* Thermal ticket: punched perforation on top, torn zigzag at the bottom.
+     The mask only reads alpha, so black/transparent here are shapes, not colors. */
+  .ticket-shadow {
+    filter: drop-shadow(0 1px 1px var(--shadow)) drop-shadow(0 12px 18px var(--shadow));
+  }
+  .ticket {
+    --perf: 12px;
+    --tooth: 8px;
+    background-color: var(--ticket);
+    color: var(--ticket-ink);
+    padding: calc(var(--perf) + 14px) 22px calc(var(--tooth) + 18px);
+    -webkit-mask:
+      radial-gradient(circle at 5px 6px, transparent 2.25px, black 2.75px) 0 0 / 10px var(--perf) repeat-x,
+      linear-gradient(black 0 0) 0 var(--perf) / 100% calc(100% - var(--perf) - var(--tooth)) no-repeat,
+      conic-gradient(from -45deg at 50% 100%, black 90deg, transparent 0) 0 100% / calc(var(--tooth) * 2) var(--tooth) repeat-x;
+    mask:
+      radial-gradient(circle at 5px 6px, transparent 2.25px, black 2.75px) 0 0 / 10px var(--perf) repeat-x,
+      linear-gradient(black 0 0) 0 var(--perf) / 100% calc(100% - var(--perf) - var(--tooth)) no-repeat,
+      conic-gradient(from -45deg at 50% 100%, black 90deg, transparent 0) 0 100% / calc(var(--tooth) * 2) var(--tooth) repeat-x;
+  }
+  .ticket-rule {
+    border-top: 1px dashed var(--ticket-muted);
+  }
+  .ticket-rule-double {
+    border-top: 3px double var(--ticket-ink);
+  }
+}
